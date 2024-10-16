@@ -1,5 +1,5 @@
 export function sum(numbers: string) {
-    const numbersList = numbers.split(/,/)
+    const numbersList = numbers.split(/,|\r\n|\r|\n/)
     return numbersList.reduce((total, number) => {
         //check for empty string
         if (number.trim().length == 0)

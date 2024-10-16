@@ -11,4 +11,7 @@ describe('test sum function', () => {
     test.concurrent('passing non numeric characters', async ({ expect }) => {
         expect(() => sum('//[,]\na b ')).toThrowError(/Only addition of numbers is supported./)
     })
+    test.concurrent('passing new line characters in place of comma', async ({ expect }) => {
+        expect(sum('1\n\r2\n3\r4')).toBe(10)
+    })
 })
