@@ -2,9 +2,8 @@ export function sum(numbers: string) {
     //check for empty string
     if (numbers.trim().length == 0)
         return 0
-    const [delimiter, remainingString] = splitHeader(numbers)
-    const numbersList = remainingString.split(new RegExp(String.raw`${delimiter}|\r\n|\r|\n`))
-    console.log(numbersList)
+    const [delimiters, remainingString] = splitHeader(numbers)
+    const numbersList = remainingString.split(new RegExp(String.raw`${delimiters.reduce((delimitersList, delimiter) => `${delimitersList}${delimiter}|`, '')}\r\n|\r|\n`))
     return numbersList.reduce((total, number, index) => {
         //check of empty string
         if (number.trim().length == 0)
@@ -26,13 +25,16 @@ function splitHeader(numbers: string) {
     const header = numbers.match(/^((\/\/)(.*?)(\r\n|\r|\n))/g)
     if (!header)
         throw new Error('No header provided.')
-    const delimiter = header[0].match(/(?<=\/\/\[)(.+?)(?=(\])(\r\n|\r|\n))/g)
-    if (!delimiter)
+    const trimmedHeader = header[0].match(/(?<=\/\/)(.+?)(?=(\r\n|\r|\n))/g)
+    if (!trimmedHeader)
         throw new Error('No delimiter provided.')
-    //sanitize delimiter character before passing to regx.
-    delimiter[0] = delimiter[0].replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+    const delimiters = trimmedHeader[0].match(/(?<=\[)(.+?)(?=\])/g)
+    if (!delimiters)
+        throw new Error('No delimiter provided.')
+    //sanitize delimiter characters before passing to regx.
+    const updatedDelimiters = delimiters.map(delimiter => delimiter.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'))
     const remainingString = numbers.replace(header[0], '').toString()
-    return [delimiter, remainingString] as [RegExpMatchArray | null, string]
+    return [updatedDelimiters, remainingString] as [RegExpMatchArray, string]
 }
 
 function throwNegativeNumbersError(numberList: string[], index: number) {
