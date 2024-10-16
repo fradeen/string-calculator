@@ -26,4 +26,7 @@ describe('test sum function', () => {
     test.concurrent('passing multi-character delimiter', async ({ expect }) => {
         expect(() => sum('//?:\n1,2')).toThrowError(/Delimiter must a single character./)
     })
+    test.concurrent('passing regx special symbol (*) as delimiter', async ({ expect }) => {
+        expect(sum('//*\n1*2*3')).toBe(6)
+    })
 })

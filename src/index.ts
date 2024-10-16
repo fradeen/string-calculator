@@ -26,6 +26,8 @@ function splitHeader(numbers: string) {
         throw new Error('No delimiter provided.')
     if (delimiter[0].length > 1)
         throw new Error('Delimiter must a single character.')
+    //sanitize delimiter character before passing to regx.
+    delimiter[0] = delimiter[0].replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
     const remainingString = numbers.replace(header[0], '').toString()
     return [delimiter, remainingString] as [RegExpMatchArray | null, string]
 }
