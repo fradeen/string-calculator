@@ -29,4 +29,7 @@ describe('test sum function', () => {
     test.concurrent('passing regx special symbol (*) as delimiter', async ({ expect }) => {
         expect(sum('//*\n1*2*3')).toBe(6)
     })
+    test.concurrent('passing negative numbers', async ({ expect }) => {
+        expect(() => sum('//,\n1\n2,-3,5,6,7,-10')).toThrowError(/(negative numbers not allowed)(.*)(-3,-10)/)
+    })
 })

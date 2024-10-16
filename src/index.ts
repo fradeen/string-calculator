@@ -5,7 +5,7 @@ export function sum(numbers: string) {
     const [delimiter, remainingString] = splitHeader(numbers)
     const numbersList = remainingString.split(new RegExp(String.raw`${delimiter}|\r\n|\r|\n`))
     console.log(numbersList)
-    return numbersList.reduce((total, number) => {
+    return numbersList.reduce((total, number, index) => {
         //check of empty string
         if (number.trim().length == 0)
             return total
@@ -13,6 +13,8 @@ export function sum(numbers: string) {
         //check for NaN
         if (Number.isNaN(parsedNumber))
             throw new Error('Only addition of numbers is supported.')
+        if (parsedNumber < 0)
+            throwNegativeNumbersError(numbersList, index)
         return total + Number.parseFloat(number)
     }, 0)
 }
@@ -30,4 +32,14 @@ function splitHeader(numbers: string) {
     delimiter[0] = delimiter[0].replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
     const remainingString = numbers.replace(header[0], '').toString()
     return [delimiter, remainingString] as [RegExpMatchArray | null, string]
+}
+
+function throwNegativeNumbersError(numberList: string[], index: number) {
+    const negativeNumbersList: number[] = []
+    for (let i = index; i < numberList.length; i++) {
+        let parsedNumber = Number.parseFloat(numberList[i])
+        if (!Number.isNaN(parsedNumber) && parsedNumber < 0)
+            negativeNumbersList.push(parsedNumber)
+    }
+    throw new Error(`negative numbers not allowed ${negativeNumbersList.toString()}`)
 }
