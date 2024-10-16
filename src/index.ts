@@ -26,11 +26,9 @@ function splitHeader(numbers: string) {
     const header = numbers.match(/^((\/\/)(.*?)(\r\n|\r|\n))/g)
     if (!header)
         throw new Error('No header provided.')
-    const delimiter = header[0].match(/(?<=\/\/)(.+?)(?=(\r\n|\r|\n))/g)
+    const delimiter = header[0].match(/(?<=\/\/\[)(.+?)(?=(\])(\r\n|\r|\n))/g)
     if (!delimiter)
         throw new Error('No delimiter provided.')
-    if (delimiter[0].length > 1)
-        throw new Error('Delimiter must a single character.')
     //sanitize delimiter character before passing to regx.
     delimiter[0] = delimiter[0].replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
     const remainingString = numbers.replace(header[0], '').toString()
