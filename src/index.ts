@@ -15,6 +15,9 @@ export function sum(numbers: string) {
             throw new Error('Only addition of numbers is supported.')
         if (parsedNumber < 0)
             throwNegativeNumbersError(numbersList, index)
+        //ignore numbers greater than 1000
+        if (parsedNumber > 1000)
+            return total
         return total + Number.parseFloat(number)
     }, 0)
 }

@@ -32,4 +32,7 @@ describe('test sum function', () => {
     test.concurrent('passing negative numbers', async ({ expect }) => {
         expect(() => sum('//,\n1\n2,-3,5,6,7,-10')).toThrowError(/(negative numbers not allowed)(.*)(-3,-10)/)
     })
+    test.concurrent('add number gretaer than 1000', async ({ expect }) => {
+        expect(sum('//,\n1,2,3000,3,4')).toBe(10)
+    })
 })
